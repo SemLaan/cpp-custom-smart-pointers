@@ -130,6 +130,7 @@
     <ClCompile Include="BetterSmartPointers.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="allocator.h" />
     <ClInclude Include="example_class.h" />
     <ClInclude Include="scope.h" />
   </ItemGroup>

@@ -1,11 +1,12 @@
 #pragma once
-
+#include "allocator.h"
 
 template <typename T>
 class Scope
 {
 private:
 	T* m_ptr;
+	Allocator* m_allocator;
 public:
 	// Default constructor
 	Scope()
@@ -13,15 +14,15 @@ public:
 	{}
 
 	// Constructor from pointer, this takes ownership over the pointer
-	explicit Scope(T* ptr)
-		: m_ptr(ptr)
+	explicit Scope(Allocator* allocator, T* ptr)
+		: m_ptr(ptr), m_allocator(allocator)
 	{}
 
 	~Scope()
 	{
 		// Separate object destruction from deallocation
 		m_ptr->~T();
-		free(m_ptr);
+		m_allocator->Deallocate(m_ptr);
 	}
 
 	// Dereference operator
@@ -44,13 +45,13 @@ public:
 // Function for creating a scope of object type T with parameters args of types Types
 // This is so unreadable because we want to avoid copying the args, so we have to first take the args as rvalues,
 // and then because we're passing them to another function we have to let the compiler(?) know that the constructor of T can take
-// ownership of them as if they are still rvalues by using std::forward
+// ownership of the arguments as if they are still rvalues by using std::forward
 // We also don't know the type of scope nor the constructor arguments that takes so we have to use templates
 // And finally the ... are for variadic arguments
 template <typename T, typename... Types>
-Scope<T> CreateScope(Types&&... args)
+Scope<T> CreateScope(Allocator* allocator, Types&&... args)
 {
 	// Separate allocation from object initialization
-	T* temp = (T*)malloc(sizeof(T));
-	return Scope<T>(new(temp) T(std::forward<Types>(args)...));
+	T* temp = (T*)allocator->Allocate(sizeof(T));
+	return Scope<T>(allocator, new(temp) T(std::forward<Types>(args)...));
 }

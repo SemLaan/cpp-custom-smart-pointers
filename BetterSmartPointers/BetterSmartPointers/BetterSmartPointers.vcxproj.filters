@@ -26,5 +26,8 @@
     <ClInclude Include="example_class.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="allocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
