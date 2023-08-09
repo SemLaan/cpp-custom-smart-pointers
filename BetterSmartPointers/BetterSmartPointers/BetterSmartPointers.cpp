@@ -2,7 +2,7 @@
 #include "example_class.h"
 #include "scope.h"
 
-#define MEMORY_LEAK_TEST_COUNT 10000
+#define MEMORY_LEAK_TEST_COUNT 100000
 
 
 int main()

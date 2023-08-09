@@ -19,7 +19,9 @@ public:
 
 	~Scope()
 	{
-		delete m_ptr;
+		// Separate object destruction from deallocation
+		m_ptr->~T();
+		free(m_ptr);
 	}
 
 	// Dereference operator
@@ -48,5 +50,7 @@ public:
 template <typename T, typename... Types>
 Scope<T> CreateScope(Types&&... args)
 {
-	return Scope<T>(new T(std::forward<Types>(args)...));
+	// Separate allocation from object initialization
+	T* temp = (T*)malloc(sizeof(T));
+	return Scope<T>(new(temp) T(std::forward<Types>(args)...));
 }
