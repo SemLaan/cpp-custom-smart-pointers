@@ -22,7 +22,7 @@ public:
 	{
 		// Separate object destruction from deallocation
 		m_ptr->~T();
-		m_allocator->Deallocate(m_ptr);
+		m_allocator->Deallocate(m_ptr, sizeof(T));
 	}
 
 	// Dereference operator

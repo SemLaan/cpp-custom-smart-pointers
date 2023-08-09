@@ -19,8 +19,9 @@ public:
 		return malloc(size);
 	}
 
-	void Deallocate(void* blk)
+	void Deallocate(void* blk, size_t size)
 	{
+		// Now you can use size here to make a better deallocate function
 		free(blk);
 	}
 };
